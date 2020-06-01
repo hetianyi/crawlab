@@ -132,9 +132,12 @@ func (g ScrapyGenerator) GetNonListParserString(stageName string, stage entity.S
 
 	// 遍历字段列表
 	for _, f := range stage.Fields {
-		line := fmt.Sprintf(`item['%s'] = response.%s.extract_first()`, f.Name, g.GetExtractStringFromField(f))
-		line = g.PadCode(line, 2)
-		str += line
+		// TODO Jason He
+		if f.IsArray == "true" {
+			line := fmt.Sprintf(`item['%s'] = response.%s.extract_first()`, f.Name, g.GetExtractStringFromField(f))
+			line = g.PadCode(line, 2)
+			str += line
+		}
 	}
 
 	// next stage 字段

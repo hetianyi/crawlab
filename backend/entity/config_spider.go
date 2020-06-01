@@ -35,6 +35,8 @@ type Field struct {
 	Css       string `yaml:"css" json:"css"`
 	Xpath     string `yaml:"xpath" json:"xpath"`
 	Attr      string `yaml:"attr" json:"attr"`
+	IsArray   string `yaml:"is_array" json:"is_array"`
+	IsHtml    string `yaml:"is_html" json:"is_html"`
 	NextStage string `yaml:"next_stage" json:"next_stage"`
 	Remark    string `yaml:"remark" json:"remark"`
 }
