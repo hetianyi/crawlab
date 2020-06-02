@@ -4,6 +4,8 @@ import stats from './stats'
 
 export default {
   isFinishedTour: (tourName) => {
+    // 禁用新手教程
+    return true
     if (!localStorage.getItem('tour')) {
       localStorage.setItem('tour', JSON.stringify({}))
       return false

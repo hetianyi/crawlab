@@ -174,63 +174,6 @@ export const constantRouterMap = [
     ]
   },
   {
-    path: '/disclaimer',
-    component: Layout,
-    meta: {
-      title: 'Disclaimer',
-      icon: 'fa fa-exclamation-triangle'
-    },
-    children: [
-      {
-        path: '',
-        name: 'Disclaimer',
-        component: () => import('../views/doc/Disclaimer'),
-        meta: {
-          title: 'Disclaimer',
-          icon: 'fa fa-exclamation-triangle'
-        }
-      }
-    ]
-  },
-  {
-    path: '/challenges',
-    component: Layout,
-    meta: {
-      title: 'ChallengeList',
-      icon: 'fa fa-flash'
-    },
-    children: [
-      {
-        path: '',
-        name: 'ChallengeList',
-        component: () => import('../views/challenge/ChallengeList'),
-        meta: {
-          title: 'Challenges',
-          icon: 'fa fa-flash'
-        }
-      }
-    ]
-  },
-  {
-    path: '/feedback',
-    component: Layout,
-    meta: {
-      title: 'Feedback',
-      icon: 'fa fa-commenting-o'
-    },
-    children: [
-      {
-        path: '',
-        name: 'Feedback',
-        component: () => import('../views/feedback/Feedback'),
-        meta: {
-          title: 'Feedback',
-          icon: 'fa fa-commenting'
-        }
-      }
-    ]
-  },
-  {
     path: '/users',
     component: Layout,
     meta: {
