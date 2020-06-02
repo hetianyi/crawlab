@@ -15,7 +15,6 @@ jobs:
       - run: |
           echo "$ali_pass" | docker login registry.cn-hongkong.aliyuncs.com -u "$ali_user" --password-stdin
           echo "$docker_pass" | docker login -u "$docker_user" --password-stdin
-          git checkout array-field
           docker build -t hehety/crawlab:latest .
           docker tag hehety/crawlab:latest registry.cn-hongkong.aliyuncs.com/hehety/crawlab:latest
           docker push hehety/crawlab:latest
