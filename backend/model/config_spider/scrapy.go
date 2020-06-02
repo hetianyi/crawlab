@@ -134,6 +134,10 @@ func (g ScrapyGenerator) GetNonListParserString(stageName string, stage entity.S
 	for _, f := range stage.Fields {
 		// TODO Jason He
 		if f.IsArray == "true" {
+			line := fmt.Sprintf(`item['%s'] = json.dumps(response.%s.getall())`, f.Name, g.GetExtractStringFromField(f))
+			line = g.PadCode(line, 2)
+			str += line
+		} else {
 			line := fmt.Sprintf(`item['%s'] = response.%s.extract_first()`, f.Name, g.GetExtractStringFromField(f))
 			line = g.PadCode(line, 2)
 			str += line
@@ -219,6 +223,10 @@ func (g ScrapyGenerator) GetExtractStringFromField(f entity.Field) string {
 	if f.Css != "" {
 		// 如果为CSS
 		if f.Attr == "" {
+			if f.IsHtml == "true" {
+				// html
+				return fmt.Sprintf(`css('%s')`, f.Css)
+			}
 			// 文本
 			return fmt.Sprintf(`css('%s::text')`, f.Css)
 		} else {
@@ -228,6 +236,10 @@ func (g ScrapyGenerator) GetExtractStringFromField(f entity.Field) string {
 	} else {
 		// 如果为XPath
 		if f.Attr == "" {
+			if f.IsHtml == "true" {
+				// html
+				return fmt.Sprintf(`xpath('%s')`, f.Xpath)
+			}
 			// 文本
 			return fmt.Sprintf(`xpath('string(%s)')`, f.Xpath)
 		} else {
