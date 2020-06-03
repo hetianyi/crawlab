@@ -1,4 +1,4 @@
-FROM FROM hehety/crawlab-build:2
+FROM hehety/crawlab-build:2
 
 # add files
 ADD . /app
