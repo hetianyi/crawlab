@@ -304,9 +304,9 @@ func GetDailyTaskStats(query bson.M) ([]TaskDailyItem, error) {
 		"$project": bson.M{
 			"date": bson.M{
 				"$dateToString": bson.M{
-					"format":   "%Y%m%d",
-					"date":     "$create_ts",
-					"timezone": "Asia/Shanghai",
+					"format": "%Y%m%d",
+					"date":   "$create_ts",
+					// "timezone": "Asia/Shanghai",
 				},
 			},
 			"success_count": bson.M{

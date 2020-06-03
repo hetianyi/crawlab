@@ -94,7 +94,7 @@ func GetVisitDays(uid bson.ObjectId) (int, error) {
 		{
 			"$match": bson.M{
 				"user_id": uid,
-				"type": constants.ActionTypeVisit,
+				"type":    constants.ActionTypeVisit,
 			},
 		},
 		{
@@ -102,8 +102,8 @@ func GetVisitDays(uid bson.ObjectId) (int, error) {
 				"date": bson.M{
 					"$dateToString": bson.M{
 						"format": "%Y%m%d",
-						"date": "$create_ts",
-						"timezone": "Asia/Shanghai",
+						"date":   "$create_ts",
+						// "timezone": "Asia/Shanghai",
 					},
 				},
 			},
@@ -114,7 +114,7 @@ func GetVisitDays(uid bson.ObjectId) (int, error) {
 			},
 		},
 		{
-			"_id": nil,
+			"_id":  nil,
 			"days": bson.M{"$sum": 1},
 		},
 	}

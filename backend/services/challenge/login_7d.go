@@ -10,9 +10,10 @@ type Login7dService struct {
 }
 
 func (s *Login7dService) Check() (bool, error) {
-	days, err := model.GetVisitDays(s.UserId)
+	_, err := model.GetVisitDays(s.UserId)
 	if err != nil {
 		return false, err
 	}
-	return days >= 7, nil
+	return false, nil
+	// return days >= 7, nil
 }
