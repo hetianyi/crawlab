@@ -1,0 +1,20 @@
+FROM hehety/crawlab-build:latest
+
+# add files
+ADD . /app
+COPY ./nginx/crawlab.conf /etc/nginx/conf.d
+RUN cd /app && \
+	tar xzf dist.tar.gz && \
+	rm -f /app/dist.tar.gz && \
+	mv /app/backend/crawlab /usr/local/bin/crawlab-server
+
+WORKDIR /app/backend
+ENV TZ Asia/Shanghai
+ENV LC_ALL C.UTF-8
+ENV LANG C.UTF-8
+# frontend port
+EXPOSE 8080
+# backend port
+EXPOSE 8000
+# start backend
+CMD ["/bin/bash", "/app/docker_init.sh"]
