@@ -155,7 +155,7 @@ func DeleteProject(c *gin.Context) {
 }
 
 func GetProjectTags(c *gin.Context) {
-	type Result struct {
+	/*type Result struct {
 		Tag string `json:"tag" bson:"tag"`
 	}
 
@@ -187,11 +187,11 @@ func GetProjectTags(c *gin.Context) {
 	if err := col.Pipe(pipeline).All(&items); err != nil {
 		HandleError(http.StatusInternalServerError, c, err)
 		return
-	}
+	}*/
 
 	c.JSON(http.StatusOK, Response{
 		Status:  "ok",
 		Message: "success",
-		Data:    items,
+		Data:    nil,
 	})
 }
