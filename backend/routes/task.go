@@ -396,7 +396,7 @@ func DownloadTaskResultsSQL(c *gin.Context, columns []string, results []interfac
 	}
 
 	// 设置下载的文件名
-	c.Writer.Header().Set("Content-Disposition", "attachment;filename="+spider.Name+".sql")
+	c.Writer.Header().Set("Content-Disposition", "attachment;filename="+spider.Config.Name+".sql")
 	if len(columns) == 0 {
 		// 设置文件类型以及输出数据
 		c.Data(http.StatusOK, "text/sql", []byte{})
@@ -416,7 +416,7 @@ func DownloadTaskResultsSQL(c *gin.Context, columns []string, results []interfac
 	// 写入内容
 	for _, result := range results {
 		bytesBuffer.WriteString("insert into `")
-		bytesBuffer.WriteString(spider.Name)
+		bytesBuffer.WriteString(spider.Config.Name)
 		bytesBuffer.WriteString("` (")
 
 		for i, c := range finalExportColumns {
