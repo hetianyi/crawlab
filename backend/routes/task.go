@@ -307,6 +307,7 @@ func GetTaskResults(c *gin.Context) {
 
 func DownloadTaskResultsCsv(c *gin.Context) {
 	id := c.Param("id")
+	format, _ := c.GetQuery("format")
 
 	// 获取任务
 	task, err := model.GetTask(id)
@@ -331,6 +332,11 @@ func DownloadTaskResultsCsv(c *gin.Context) {
 		for key := range item {
 			columns = append(columns, key)
 		}
+	}
+
+	if format == "sql" {
+		DownloadTaskResultsSQL(c, columns, results)
+		return
 	}
 
 	// 缓冲
@@ -372,6 +378,76 @@ func DownloadTaskResultsCsv(c *gin.Context) {
 
 	// 设置文件类型以及输出数据
 	c.Data(http.StatusOK, "text/csv", bytesBuffer.Bytes())
+}
+
+func DownloadTaskResultsSQL(c *gin.Context, columns []string, results []interface{}) {
+
+	id := c.Param("id")
+
+	task, err := model.GetTask(id)
+	if err != nil {
+		HandleError(http.StatusInternalServerError, c, err)
+		return
+	}
+	spider, err := task.GetSpider()
+	if err != nil {
+		HandleError(http.StatusInternalServerError, c, err)
+		return
+	}
+
+	// 设置下载的文件名
+	c.Writer.Header().Set("Content-Disposition", "attachment;filename="+spider.Name+".sql")
+	if len(columns) == 0 {
+		// 设置文件类型以及输出数据
+		c.Data(http.StatusOK, "text/sql", []byte{})
+		return
+	}
+	var finalExportColumns []string
+	// 过滤掉无关字段
+	for _, c := range columns {
+		if c != "_id" && c != "task_id" {
+			finalExportColumns = append(finalExportColumns, c)
+		}
+	}
+
+	// 缓冲
+	bytesBuffer := &bytes.Buffer{}
+
+	// 写入内容
+	for _, result := range results {
+		bytesBuffer.WriteString("insert into `")
+		bytesBuffer.WriteString(spider.Name)
+		bytesBuffer.WriteString("` (")
+
+		for i, c := range finalExportColumns {
+			bytesBuffer.WriteString("`")
+			bytesBuffer.WriteString(c)
+			bytesBuffer.WriteString("`")
+			if i < len(finalExportColumns)-1 {
+				bytesBuffer.WriteString(",")
+			}
+		}
+		bytesBuffer.WriteString(") values(")
+
+		// 将result转换为[]string
+		item := result.(bson.M)
+		for i, col := range finalExportColumns {
+			value := utils.InterfaceToString(item[col])
+			if value == "" {
+				bytesBuffer.WriteString("\"\"")
+			} else {
+				bytesBuffer.WriteString("\"")
+				bytesBuffer.WriteString(value)
+				bytesBuffer.WriteString("\"")
+			}
+			if i < len(finalExportColumns)-1 {
+				bytesBuffer.WriteString(",")
+			}
+		}
+		bytesBuffer.WriteString(");\n")
+		c.Writer.Write(bytesBuffer.Bytes())
+		bytesBuffer.Reset()
+	}
 }
 
 func CancelTask(c *gin.Context) {

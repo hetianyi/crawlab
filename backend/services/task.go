@@ -28,7 +28,6 @@ import (
 	"strconv"
 	"strings"
 	"sync"
-	"syscall"
 	"time"
 )
 
@@ -267,7 +266,7 @@ func FinishOrCancelTask(ch chan string, cmd *exec.Cmd, s model.Spider, t model.T
 		if runtime.GOOS == constants.Windows {
 			err = cmd.Process.Kill()
 		} else {
-			err = syscall.Kill(-cmd.Process.Pid, syscall.SIGKILL)
+			//err = syscall.Kill(-cmd.Process.Pid, syscall.SIGKILL)
 		}
 		// 取消进程
 		if err != nil {
@@ -378,7 +377,7 @@ func ExecuteShellCmd(cmdStr string, cwd string, t model.Task, s model.Spider, u 
 
 	// kill的时候，可以kill所有的子进程
 	if runtime.GOOS != constants.Windows {
-		cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
+		//cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
 	}
 
 	// 启动进程
