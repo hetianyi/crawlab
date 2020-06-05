@@ -454,7 +454,6 @@ func DownloadTaskResultsSQL(c *gin.Context, columns []string, results []interfac
 	}
 }
 
-
 func DownloadTaskResultsJSON(c *gin.Context, columns []string, results []interface{}) {
 
 	id := c.Param("id")
@@ -503,8 +502,6 @@ func DownloadTaskResultsJSON(c *gin.Context, columns []string, results []interfa
 			}
 		}
 		bs, _ := json.Marshal(lineMap)
-		c.Writer.Write(bs)
-		c.Writer.WriteString("\n")
 		c.Writer.Write(bs)
 		c.Writer.WriteString("\n")
 	}
