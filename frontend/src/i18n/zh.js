@@ -62,6 +62,8 @@ export default {
   'Extract Fields': '提取字段',
   'Download': '下载',
   'Download CSV': '下载CSV',
+  'Download SQL': '下载SQL',
+  'Download JSON': '下载JSON',
   'Upload Zip File': '上传Zip文件',
   'Upload': '上传',
   'Item Threshold': '子项阈值',

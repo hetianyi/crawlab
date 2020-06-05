@@ -7,6 +7,7 @@ import (
 	"crawlab/services"
 	"crawlab/utils"
 	"encoding/csv"
+	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"github.com/globalsign/mgo/bson"
 	"net/http"
@@ -337,6 +338,9 @@ func DownloadTaskResultsCsv(c *gin.Context) {
 	if format == "sql" {
 		DownloadTaskResultsSQL(c, columns, results)
 		return
+	} else if format == "json" {
+		DownloadTaskResultsJSON(c, columns, results)
+		return
 	}
 
 	// 缓冲
@@ -447,6 +451,62 @@ func DownloadTaskResultsSQL(c *gin.Context, columns []string, results []interfac
 		bytesBuffer.WriteString(");\n")
 		c.Writer.Write(bytesBuffer.Bytes())
 		bytesBuffer.Reset()
+	}
+}
+
+
+func DownloadTaskResultsJSON(c *gin.Context, columns []string, results []interface{}) {
+
+	id := c.Param("id")
+
+	task, err := model.GetTask(id)
+	if err != nil {
+		HandleError(http.StatusInternalServerError, c, err)
+		return
+	}
+	spider, err := task.GetSpider()
+	if err != nil {
+		HandleError(http.StatusInternalServerError, c, err)
+		return
+	}
+
+	// 设置下载的文件名
+	c.Writer.Header().Set("Content-Disposition", "attachment;filename="+spider.Config.Name+".json")
+	if len(columns) == 0 {
+		// 设置文件类型以及输出数据
+		c.Data(http.StatusOK, "text/plain", []byte{})
+		return
+	}
+	var finalExportColumns []string
+	// 过滤掉无关字段
+	for _, c := range columns {
+		if c != "_id" && c != "task_id" {
+			finalExportColumns = append(finalExportColumns, c)
+		}
+	}
+
+	c.Writer.WriteHeader(200)
+
+	// 写入内容
+	for _, result := range results {
+		lineMap := make(map[string]interface{})
+
+		// 将result转换为[]string
+		item := result.(bson.M)
+		for _, col := range finalExportColumns {
+			value := utils.InterfaceToString(item[col])
+
+			if value == "" {
+				lineMap[col] = ""
+			} else {
+				lineMap[col] = value
+			}
+		}
+		bs, _ := json.Marshal(lineMap)
+		c.Writer.Write(bs)
+		c.Writer.WriteString("\n")
+		c.Writer.Write(bs)
+		c.Writer.WriteString("\n")
 	}
 }
 

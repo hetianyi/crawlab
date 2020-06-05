@@ -22,6 +22,12 @@
           <el-button size="small" class="btn-download" type="primary" icon="el-icon-download" @click="downloadCSV">
             {{$t('Download CSV')}}
           </el-button>
+          <el-button size="small" class="btn-download" type="primary" icon="el-icon-download" @click="downloadSQL">
+            {{$t('Download SQL')}}
+          </el-button>
+          <el-button size="small" class="btn-download" type="primary" icon="el-icon-download" @click="downloadJSON">
+            {{$t('Download JSON')}}
+          </el-button>
         </div>
         <general-table-view :data="taskResultsData"
                             :columns="taskResultsColumns"
@@ -226,6 +232,14 @@ export default {
     },
     downloadCSV () {
       this.$store.dispatch('task/getTaskResultExcel', this.$route.params.id)
+      this.$st.sendEv('任务详情', '结果', '下载CSV')
+    },
+    downloadSQL () {
+      this.$store.dispatch('task/getTaskResultOther', { id: this.$route.params.id, format: 'sql' })
+      this.$st.sendEv('任务详情', '结果', '下载CSV')
+    },
+    downloadJSON () {
+      this.$store.dispatch('task/getTaskResultOther', { id: this.$route.params.id, format: 'json' })
       this.$st.sendEv('任务详情', '结果', '下载CSV')
     },
     async getTaskLog (showLoading) {
