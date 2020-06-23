@@ -13,6 +13,9 @@ func AuthorizationMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// 获取token string
 		tokenStr := c.GetHeader("Authorization")
+		if tokenStr == "" {
+			tokenStr = c.Query("token")
+		}
 
 		// 校验token
 		user, err := services.CheckToken(tokenStr)
