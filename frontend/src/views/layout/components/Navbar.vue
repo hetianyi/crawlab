@@ -65,15 +65,7 @@
       class="wechat right"
       trigger="click"
     >
-      <div style="margin-bottom: 5px">
-        <label>{{$t('Add Wechat to join discussion group')}}</label>
-      </div>
-      <div>
-        <img class="wechat-img" src="http://static-docs.crawlab.cn/wechat.jpg">
-      </div>
-      <div slot="reference">
-        <i class="fa fa-wechat"></i>
-      </div>
+
     </el-popover>
     <div class="github right">
       <!-- Place this tag where you want the button to render. -->
