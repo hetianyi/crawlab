@@ -1,7 +1,7 @@
 version: '3.5'
 services:
   crawlab-master:
-    image: hehety/crawlab:latest-arm32v7
+    image: registry.cn-shanghai.aliyuncs.com/hehety/crawlab:latest-arm32v7
     hostname: crawlab-master
     networks:
       - crawlab
@@ -52,7 +52,7 @@ services:
   
   
   crawlab-worker1:
-    image: hehety/crawlab:latest-arm32v7
+    image: registry.cn-shanghai.aliyuncs.com/hehety/crawlab:latest-arm32v7
     hostname: crawlab-worker1
     networks:
       - crawlab
@@ -73,7 +73,7 @@ services:
   
   
   crawlab-worker2:
-    image: hehety/crawlab:latest-arm32v7
+    image: registry.cn-shanghai.aliyuncs.com/hehety/crawlab:latest-arm32v7
     hostname: crawlab-worker2
     networks:
       - crawlab
