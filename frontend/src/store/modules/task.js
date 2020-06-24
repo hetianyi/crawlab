@@ -1,5 +1,4 @@
 import request from '../../api/request'
-import utils from '../../utils'
 
 const state = {
   // TaskList
@@ -239,26 +238,8 @@ const actions = {
     link.remove()
   },
   async getTaskResultOther ({ state, commit }, { id, format }) {
-    const { data } = await request.request('GET', '/tasks/' + id + '/results/download', {
-      format: format
-    }, {
-      responseType: 'blob' // important
-    })
-    let array = new Array()
-    for (let i = 0; i < data.length; i++) {
-      array.push(data[i])
-    }
-    const downloadUrl = window.URL.createObjectURL(new Blob(array))
-
-    const link = document.createElement('a')
-
-    link.href = downloadUrl
-
-    link.setAttribute('download', 'data.' + format) // any other extension
-
-    document.body.appendChild(link)
-    link.click()
-    link.remove()
+    window.open(request.baseUrl + '/tasks/' + id + '/results/download?format=' + format +
+      '&token=' + window.localStorage.getItem('token'), '_blank')
   },
   cancelTask ({ state, dispatch }, id) {
     return new Promise(resolve => {
