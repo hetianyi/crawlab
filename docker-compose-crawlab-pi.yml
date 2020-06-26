@@ -4,7 +4,7 @@ services:
     image: registry.cn-shanghai.aliyuncs.com/hehety/crawlab:latest-arm32v7
     hostname: crawlab-master
     networks:
-      - crawlab
+      - pi
     deploy:
       replicas: 1
       placement:
@@ -55,7 +55,7 @@ services:
     image: registry.cn-shanghai.aliyuncs.com/hehety/crawlab:latest-arm32v7
     hostname: crawlab-worker1
     networks:
-      - crawlab
+      - pi
     deploy:
       mode: global
     environment:
@@ -72,32 +72,11 @@ services:
   
   
   
-  crawlab-worker2:
-    image: registry.cn-shanghai.aliyuncs.com/hehety/crawlab:latest-arm32v7
-    hostname: crawlab-worker2
-    networks:
-      - crawlab
-    deploy:
-      mode: global
-    environment:
-      CRAWLAB_SERVER_MASTER: "N"
-      CRAWLAB_MONGO_HOST: "crawlab-mongo"
-      CRAWLAB_MONGO_PORT: "27017"  # MongoDB port MongoDB 的端口
-      CRAWLAB_MONGO_DB: "crawlab"  # MongoDB database MongoDB 的数据库
-      CRAWLAB_REDIS_ADDRESS: "crawlab-redis"  # Redis host address Redis 的地址，在 docker compose 网络中，直接引用服务名称
-      CRAWLAB_REDIS_PORT: "6379"  # Redis port Redis 的端口
-      CRAWLAB_REDIS_DATABASE: "1"  # Redis database Redis 的数据库
-      CRAWLAB_REDIS_PASSWORD: "123123"  # Redis password Redis 的密码
-    volumes:
-      - "crawlab_worker2_log:/var/logs/crawlab"
-  
-  
-  
   crawlab-mongo:
     image: hehety/mongo:3.0.14-rpi3
     hostname: crawlab-mongo
     networks:
-      - crawlab
+      - pi
     deploy:
       replicas: 1
       placement:
@@ -117,7 +96,7 @@ services:
     hostname: crawlab-redis
     command: redis-server --requirepass "123123"
     networks:
-      - crawlab
+      - pi
     deploy:
       replicas: 1
       placement:
@@ -138,12 +117,10 @@ volumes:
   crawlab_mongo_log:
   crawlab_master_log:
   crawlab_worker1_log:
-  crawlab_worker2_log:
 
 
 networks:
-  crawlab:
-    driver: overlay
-    attachable: true
+  pi:
+    external: true
 
 
